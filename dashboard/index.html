@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart EV Charging Analytics Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <h2>⚡ SmartEV Ops</h2>
+                <p>Telangana Network</p>
+            </div>
+            <nav class="nav-menu">
+                <a href="#overview" class="nav-link active">Overview</a>
+                <a href="#stations" class="nav-link">Stations & Chargers</a>
+                <a href="#revenue" class="nav-link">Revenue Analytics</a>
+                <a href="#demand" class="nav-link">Charging Demand</a>
+                <a href="#maintenance" class="nav-link">Maintenance</a>
+                <a href="#energy" class="nav-link">Energy Analytics</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="top-header">
+                <h1 id="page-title">Operator Control Center</h1>
+                <div class="user-profile">
+                    <span>Operator: Admin</span>
+                    <span class="status-indicator">● System Live</span>
+                </div>
+            </header>
+
+            <!-- View 1: Overview -->
+            <div id="view-overview" class="tab-content active-view">
+                <section class="kpi-grid">
+                    <div class="kpi-card">
+                        <h3>Total Stations</h3>
+                        <p class="kpi-value" id="kpi-total-stations">0</p>
+                        <span class="kpi-sub">Active Network Sites</span>
+                    </div>
+                    <div class="kpi-card">
+                        <h3>Total Chargers</h3>
+                        <p class="kpi-value" id="kpi-total-chargers">0</p>
+                        <span class="kpi-sub">Across All Hubs</span>
+                    </div>
+                    <div class="kpi-card">
+                        <h3>Available Chargers</h3>
+                        <p class="kpi-value highlight-green" id="kpi-available-chargers">0</p>
+                        <span class="kpi-sub">Ready for Use</span>
+                    </div>
+                    <div class="kpi-card">
+                        <h3>Completed Sessions</h3>
+                        <p class="kpi-value" id="kpi-completed-sessions">0</p>
+                        <span class="kpi-sub">Recorded History</span>
+                    </div>
+                    <div class="kpi-card">
+                        <h3>Total Revenue</h3>
+                        <p class="kpi-value highlight-green" id="kpi-total-revenue">₹0.00</p>
+                        <span class="kpi-sub">Successful Payments</span>
+                    </div>
+                    <div class="kpi-card">
+                        <h3>Total Energy</h3>
+                        <p class="kpi-value" id="kpi-total-energy">0 kWh</p>
+                        <span class="kpi-sub">Power Delivered</span>
+                    </div>
+                </section>
+
+                <section class="charts-grid">
+                    <div class="chart-card">
+                        <h3>Revenue by Station (₹)</h3>
+                        <canvas id="revenueByStationChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Peak Charging Hours (Sessions)</h3>
+                        <canvas id="peakHoursChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Charger Status Distribution</h3>
+                        <canvas id="chargerStatusChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Grid Input vs Delivered Energy (kWh)</h3>
+                        <canvas id="energyComparisonChart"></canvas>
+                    </div>
+                </section>
+            </div>
+
+            <!-- View 2: Stations & Chargers -->
+            <div id="view-stations" class="tab-content" style="display: none;">
+                <div class="chart-card">
+                    <h3>Live Charger Status & Network Overview</h3>
+                    <div class="data-table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Station Name</th>
+                                    <th>Location</th>
+                                    <th>Type</th>
+                                    <th>Max Power</th>
+                                    <th>Status</th>
+                                    <th>Energy Delivered</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stations-table-body">
+                                <tr><td colspan="6" style="text-align: center;">Loading charger status...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View 3: Revenue Analytics -->
+            <div id="view-revenue" class="tab-content" style="display: none;">
+                <div class="chart-card">
+                    <h3>Recent Payment Transactions</h3>
+                    <div class="data-table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Payment ID</th>
+                                    <th>Station Name</th>
+                                    <th>Amount</th>
+                                    <th>Payment Method</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="revenue-table-body">
+                                <tr><td colspan="5" style="text-align: center;">Loading transaction records...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View 4: Charging Demand -->
+            <div id="view-demand" class="tab-content" style="display: none;">
+                <div class="chart-card">
+                    <h3>Peak Demand Profile & Network Activity</h3>
+                    <p style="color: var(--text-muted); margin-top: 10px;">Peak sessions occur predominantly during morning rush hours (8:00 AM - 10:00 AM) at key tech corridors like HITEC City and Gachibowli.</p>
+                </div>
+            </div>
+
+            <!-- View 5: Maintenance -->
+            <div id="view-maintenance" class="tab-content" style="display: none;">
+                <div class="chart-card">
+                    <h3>Equipment Health & Fault Logs</h3>
+                    <p style="color: var(--text-muted); margin-top: 10px;">Network infrastructure is monitored in real time. Any fault flags reported by chargers are logged and reflected in the Charger Status Distribution matrix.</p>
+                </div>
+            </div>
+
+            <!-- View 6: Energy Analytics -->
+            <div id="view-energy" class="tab-content" style="display: none;">
+                <div class="chart-card">
+                    <h3>Grid Loss vs Station Efficiency Metrics</h3>
+                    <p style="color: var(--text-muted); margin-top: 10px;">Transformer efficiency across stations currently averages ~93.4%, tracking delivered charging power against local grid supply inputs.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
